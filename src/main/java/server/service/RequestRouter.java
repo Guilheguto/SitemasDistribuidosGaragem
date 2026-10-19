@@ -111,7 +111,7 @@ public class RequestRouter {
             userDao.cadastrarUsuario(new User(name, username, password));
 
             System.out.println("[SUCESSO CADASTRO] Novo usuário cadastrado: '" + username + "' (" + clientIp + ")");
-            return criarResposta(200, "Usuário criado com sucesso", null);
+            return criarResposta(201, "Usuário criado com sucesso", null);
 
         } catch (SQLException e) {
             if ("23505".equals(e.getSQLState())) {
