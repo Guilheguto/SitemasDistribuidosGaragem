@@ -193,8 +193,13 @@ public class RequestRouter {
             }
 
             if (!senhaAtual.equals(oldPassword)) {
+                System.out.println("[FALHA UPDATE] A senha atual para '" + username +"' está incorreta");
                 return criarResposta(401, "Senha atual incorreta", null);
             }
+
+           /* if(newPassword.equals(oldPassword)){
+                return criarResposta(400,"A nova senha não pode ser igual a anterior", null);
+            }*/
 
             userDao.atualizarSenha(username, newPassword);
             System.out.println("[SUCESSO UPDATE] Senha atualizada pelo usuário '" + username + "' (" + clientIp + ")");
