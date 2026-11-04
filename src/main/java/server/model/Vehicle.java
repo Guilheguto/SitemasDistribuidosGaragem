@@ -19,6 +19,5 @@ public class Vehicle {
     public String getBrand() { return brand; }
     public String getModel() { return model; }
     public String getType() { return type; }
-    /** Campo interno: nunca deve ser exposto nas respostas. */
     public String getOwnerUsername() { return ownerUsername; }
 }

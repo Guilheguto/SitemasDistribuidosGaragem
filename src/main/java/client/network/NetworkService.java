@@ -54,8 +54,7 @@ public class NetworkService {
             socket.close();
         }
     }
-
-    /** Escreve no console e na área de log da tela (se houver). */
+    
     public void registrar(String mensagem) {
         System.out.println(mensagem);
         Consumer<String> l = logListener;

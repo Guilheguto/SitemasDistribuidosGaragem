@@ -30,7 +30,7 @@ public class ClientGUI extends JFrame {
     private final JPanel painelConexao = new JPanel(new FlowLayout(FlowLayout.CENTER, 8, 6));
     private final JTextField txtIp = new JTextField("127.0.0.1", 14);
     private final JTextField txtPorta = new JTextField("20000", 6);
-    private final MessageLogPanel logPanel = new MessageLogPanel();
+    //private final MessageLogPanel logPanel = new MessageLogPanel();
 
     private final JTextField txtLoginUser = new JTextField(15);
     private final JPasswordField txtLoginPass = new JPasswordField(15);
@@ -62,7 +62,7 @@ public class ClientGUI extends JFrame {
             }
         });
 
-        networkService.setLogListener(logPanel::adicionar);
+        //networkService.setLogListener(logPanel::adicionar);
 
         painelConexao.setBorder(BorderFactory.createTitledBorder("Servidor de destino"));
         painelConexao.add(new JLabel("IP:"));
@@ -97,7 +97,7 @@ public class ClientGUI extends JFrame {
         setLayout(new BorderLayout());
         add(painelConexao, BorderLayout.NORTH);
         add(mainPanel, BorderLayout.CENTER);
-        add(logPanel, BorderLayout.SOUTH);
+        //add(logPanel, BorderLayout.SOUTH);
 
         mostrar(LOGIN);
     }

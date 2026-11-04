@@ -5,7 +5,6 @@ import client.network.NetworkService;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-/** Uma função por método do protocolo. Todas devolvem a resposta bruta do servidor. */
 public class ClientController {
 
     private final NetworkService networkService;

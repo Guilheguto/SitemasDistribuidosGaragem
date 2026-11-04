@@ -43,7 +43,6 @@ public class UserDao {
         return null;
     }
 
-    /** Retorna name, username e role (a senha nunca é carregada). */
     public User buscarPorUsername(String username) throws SQLException {
         String sql = "SELECT name, username, is_admin FROM users WHERE username = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -75,10 +74,6 @@ public class UserDao {
         }
     }
 
-    /**
-     * Exclui o usuário, suas sessões e seus veículos em uma única transação
-     * (exclusão em cascata sem deixar registros parciais).
-     */
     public boolean deletarUsuarioCompleto(String username) throws SQLException {
         try (Connection conn = DatabaseConnection.getConnection()) {
             conn.setAutoCommit(false);
@@ -126,7 +121,6 @@ public class UserDao {
         }
     }
 
-    /** Extra (fora do protocolo): uma linha por usuário com ONLINE/OFFLINE. */
     public JsonArray listarStatusUsuarios() throws SQLException {
         JsonArray lista = new JsonArray();
         String sql = "SELECT u.username, " +

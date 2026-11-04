@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /** Mostra as mensagens enviadas e recebidas pelo cliente (exigência da entrega). */
-public class MessageLogPanel extends JPanel {
+/*public class MessageLogPanel extends JPanel {
 
     private final JTextArea area = new JTextArea(7, 60);
 
@@ -24,7 +24,7 @@ public class MessageLogPanel extends JPanel {
         add(sul, BorderLayout.SOUTH);
     }
 
-    /** Pode ser chamado de qualquer thread. */
+
     public void adicionar(String mensagem) {
         SwingUtilities.invokeLater(() -> {
             area.append(mensagem + "\n");
@@ -32,3 +32,4 @@ public class MessageLogPanel extends JPanel {
         });
     }
 }
+*/

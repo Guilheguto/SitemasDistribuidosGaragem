@@ -2,9 +2,9 @@ package client.model;
 
 public class UserSession {
     private String token;
-    private String username = "";
-    private String name = "";
-    private String role = "user";
+    private String username;
+    private String name;
+    private String role;
 
     public String getToken() { return token; }
     public void setToken(String token) { this.token = token; }
