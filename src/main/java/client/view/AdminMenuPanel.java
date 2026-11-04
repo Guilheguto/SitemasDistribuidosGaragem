@@ -5,43 +5,36 @@ import java.awt.*;
 
 public class AdminMenuPanel extends JPanel {
 
-    public AdminMenuPanel(Runnable onUsuariosLogados, Runnable onVoltar) {
+    public AdminMenuPanel(Runnable onUsuarios, Runnable onVagas, Runnable onLocalizarVeiculo,
+                          Runnable onStatusUsuarios, Runnable onVoltar) {
         setLayout(new BorderLayout(15, 15));
-        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
 
         JLabel lblTitulo = new JLabel("Painel de Administração", SwingConstants.CENTER);
         lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 18));
         add(lblTitulo, BorderLayout.NORTH);
 
-        JPanel gridPanel = new JPanel(new GridLayout(4, 1, 10, 10));
+        JPanel grid = new JPanel(new GridLayout(4, 1, 10, 10));
+        JButton btnUsuarios = new JButton("1. Gerenciar Usuários (consultar, alterar nome, excluir, cadastrar)");
+        JButton btnVagas = new JButton("2. Gerenciar Vagas (criar, listar, alterar, excluir)");
+        JButton btnLocalizar = new JButton("3. Localizar Veículo pela Placa");
+        JButton btnStatus = new JButton("4. Status Online/Offline dos Usuários (extra, só no nosso servidor)");
 
-        JButton btnUsuariosLogados = new JButton("1. Gerenciamento de Usuários (Status Online/Offline)");
-        JButton btnLogsSistema = new JButton("2. Visualizar Logs do Sistema (Em breve)");
-        JButton btnRelatorios = new JButton("3. Relatórios Gerais (Em breve)");
-        JButton btnConfiguracoes = new JButton("4. Configurações do Servidor (Em breve)");
+        btnUsuarios.addActionListener(e -> onUsuarios.run());
+        btnVagas.addActionListener(e -> onVagas.run());
+        btnLocalizar.addActionListener(e -> onLocalizarVeiculo.run());
+        btnStatus.addActionListener(e -> onStatusUsuarios.run());
 
-
-        btnUsuariosLogados.addActionListener(e -> onUsuariosLogados.run());
-
-        btnLogsSistema.addActionListener(e ->
-                JOptionPane.showMessageDialog(this, "Funcionalidade de Logs em desenvolvimento.", "Painel Admin", JOptionPane.INFORMATION_MESSAGE));
-        btnRelatorios.addActionListener(e ->
-                JOptionPane.showMessageDialog(this, "Funcionalidade de Relatórios em desenvolvimento.", "Painel Admin", JOptionPane.INFORMATION_MESSAGE));
-        btnConfiguracoes.addActionListener(e ->
-                JOptionPane.showMessageDialog(this, "Funcionalidade de Configurações em desenvolvimento.", "Painel Admin", JOptionPane.INFORMATION_MESSAGE));
-
-        gridPanel.add(btnUsuariosLogados);
-        gridPanel.add(btnLogsSistema);
-        gridPanel.add(btnRelatorios);
-        gridPanel.add(btnConfiguracoes);
-
-        add(gridPanel, BorderLayout.CENTER);
+        grid.add(btnUsuarios);
+        grid.add(btnVagas);
+        grid.add(btnLocalizar);
+        grid.add(btnStatus);
+        add(grid, BorderLayout.CENTER);
 
         JButton btnVoltar = new JButton("Voltar ao Menu Principal");
         btnVoltar.addActionListener(e -> onVoltar.run());
-
-        JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        southPanel.add(btnVoltar);
-        add(southPanel, BorderLayout.SOUTH);
+        JPanel sul = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        sul.add(btnVoltar);
+        add(sul, BorderLayout.SOUTH);
     }
 }

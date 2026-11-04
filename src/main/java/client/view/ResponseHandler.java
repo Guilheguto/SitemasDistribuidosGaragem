@@ -8,6 +8,7 @@ import java.awt.Component;
 
 public final class ResponseHandler {
 
+    public static final String SESSAO_EXPIRADA = "Sessão expirada ou encerrada.";
     private static final int STATUS_INVALIDO = -1;
 
     private ResponseHandler() {}
@@ -36,7 +37,8 @@ public final class ResponseHandler {
             mostrarMensagem(parent, message, mensagemErroCliente(statusCode), statusCode == 401
                     ? JOptionPane.ERROR_MESSAGE
                     : JOptionPane.WARNING_MESSAGE);
-            if (statusCode == 401 && onUnauthorized != null) {
+            // 401 também é usado para "sem permissão": a sessão só é encerrada se estiver realmente inválida
+            if (statusCode == 401 && onUnauthorized != null && SESSAO_EXPIRADA.equals(message)) {
                 onUnauthorized.run();
             }
             return false;

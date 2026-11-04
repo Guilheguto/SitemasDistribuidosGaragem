@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import server.service.RequestRouter;
+import server.service.Resp;
+import server.util.ServerLog;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,11 +14,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+/** Uma conexão = uma requisição = uma resposta; depois a conexão é encerrada. */
 public class ClientHandler implements Runnable {
+
+    private static final Gson gson = new GsonBuilder().serializeNulls().create();
 
     private final Socket socket;
     private final RequestRouter router;
-    private static final Gson gson = new GsonBuilder().serializeNulls().create();
 
     public ClientHandler(Socket socket, RequestRouter router) {
         this.socket = socket;
@@ -26,34 +30,40 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
         String clientIp = socket.getInetAddress().getHostAddress();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true)) {
+        ServerLog.log("Cliente conectado: /" + clientIp);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+             PrintWriter writer = new PrintWriter(new java.io.OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true)) {
 
             socket.setSoTimeout(10000);
 
             String inputLine = reader.readLine();
             if (inputLine == null || inputLine.trim().isEmpty()) return;
 
+            ServerLog.log("[Servidor] Requisicao recebida: " + inputLine);
+
             JsonObject resp;
             try {
                 resp = router.rotearRequisicao(inputLine, clientIp);
             } catch (JsonParseException | IllegalStateException | UnsupportedOperationException | ClassCastException e) {
-                System.out.println("[FALHA REQUISIÇÃO] JSON inválido de " + clientIp);
-                resp = router.criarResposta(400, "Requisição inválida", null);
+                ServerLog.log("[Servidor] JSON inválido recebido de " + clientIp);
+                resp = Resp.criar(400, "Requisição inválida", null);
             } catch (Exception e) {
-                System.err.println("[ERRO REQUISIÇÃO]: " + e.getMessage());
+                ServerLog.log("[Servidor] Erro ao tratar requisição: " + e.getMessage());
                 e.printStackTrace();
-                resp = router.criarResposta(500, "Erro interno no servidor", null);
+                resp = Resp.criar(500, Resp.MSG_ERRO_INTERNO, null);
             }
 
-            writer.println(gson.toJson(resp));
+            String json = gson.toJson(resp);
+            ServerLog.log("[Servidor] Resposta enviada: " + json);
+            writer.println(json);
 
         } catch (IOException e) {
-            System.err.println("[ERRO CONEXÃO] " + clientIp + ": " + e.getMessage());
+            ServerLog.log("[Servidor] Erro de conexão com " + clientIp + ": " + e.getMessage());
         } finally {
             try {
                 socket.close();
             } catch (IOException ignored) {}
+            ServerLog.log("Cliente desconectado: /" + clientIp);
         }
     }
 }

@@ -1,24 +1,24 @@
 package server.model;
 
 public class User {
-    private String name;
-    private String username;
-    private String password;
-    private String creationDate;
+    public static final String ROLE_ADMIN = "admin";
+    public static final String ROLE_USER = "user";
 
-    public User(String name, String username, String password, String creationDate) {
+    private final String name;
+    private final String username;
+    private final String password;
+    private final String role;
+
+    public User(String name, String username, String password, String role) {
         this.name = name;
         this.username = username;
         this.password = password;
-        this.creationDate = creationDate;
-    }
-
-    public User(String name, String username, String password) {
-        this(name, username, password, null);
+        this.role = role;
     }
 
     public String getName() { return name; }
     public String getUsername() { return username; }
     public String getPassword() { return password; }
-    public String getCreationDate() { return creationDate; }
+    public String getRole() { return role; }
+    public boolean isAdmin() { return ROLE_ADMIN.equals(role); }
 }

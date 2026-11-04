@@ -131,18 +131,20 @@ public class AdminUsersPanel extends JPanel {
             return;
         }
 
-        if (status == 401) {
+        String mensagem = resp != null && resp.has("message") && resp.get("message").isJsonPrimitive()
+                ? resp.get("message").getAsString() : "Erro desconhecido";
+
+        if (status == 401 && ResponseHandler.SESSAO_EXPIRADA.equals(mensagem)) {
             pararMonitoramento();
-            JOptionPane.showMessageDialog(this, "Sessão inválida ou expirada. Faça login novamente.",
-                    "Acesso Não Autorizado (401)", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, mensagem, "Acesso Não Autorizado (401)", JOptionPane.ERROR_MESSAGE);
             onSessaoExpirada.run();
-        } else if (status == 403) {
+        } else if (status == 401) { // token válido, mas sem permissão de admin
             pararMonitoramento();
-            JOptionPane.showMessageDialog(this, "Acesso restrito ao administrador.",
-                    "Acesso Negado (403)", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, mensagem, "Acesso Negado (401)", JOptionPane.WARNING_MESSAGE);
             onVoltarMenuAdmin.run();
         } else {
-            lblAtualizacao.setText("Erro do servidor (código " + status + ")");
+            // por exemplo, servidor de outro colega que não implementa esta função extra
+            lblAtualizacao.setText("Servidor respondeu " + status + ": " + mensagem);
         }
     }
 
