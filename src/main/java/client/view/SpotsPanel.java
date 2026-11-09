@@ -20,7 +20,7 @@ public class SpotsPanel extends JPanel {
 
     private static final String[] STATUS = {"disponivel", "fora_de_servico", "ocupada"};
     private static final String[] TIPOS = {"eletrico", "combustao"};
-    private static final int COL_ANDAR = 0, COL_VAGA = 1, COL_STATUS = 3, COL_PLACA = 4;
+    private static final int COL_ANDAR = 0, COL_VAGA = 1, COL_STATUS = 3, COL_PLACA = 4, COL_TIPO = 5;
 
     private final ClientController controller;
     private final Runnable onSessaoExpirada;
