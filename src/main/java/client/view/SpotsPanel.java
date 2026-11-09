@@ -211,23 +211,42 @@ public class SpotsPanel extends JPanel {
         int l = selecionada();
         if (l < 0) return;
         final String vaga = celula(l, COL_VAGA);
+        final String tipoVaga = celula(l, COL_TIPO);
+
+        if (!"disponivel".equals(celula(l, COL_STATUS))) {
+            Forms.aviso(this, "A vaga " + vaga + " não está disponível.");
+            return;
+        }
 
         Async.executar(this, controller::listarVeiculos, resp -> {
             if (!ok(resp, null)) return;
+
             List<String> placas = new ArrayList<>();
+            int totalVeiculos = 0;
             JsonElement dados = resp.get("data");
             if (dados != null && dados.isJsonArray()) {
                 for (JsonElement e : dados.getAsJsonArray()) {
-                    String p = JsonUtil.texto(e.getAsJsonObject(), "licensePlate");
-                    if (p != null) placas.add(p);
+                    JsonObject o = e.getAsJsonObject();
+                    String placa = JsonUtil.texto(o, "licensePlate");
+                    String tipoVeiculo = JsonUtil.texto(o, "type");
+                    if (placa == null) continue;
+                    totalVeiculos++;
+                    if (tipoVaga.equals(tipoVeiculo)) placas.add(placa); // só veículos compatíveis
                 }
             }
-            if (placas.isEmpty()) {
+
+            if (totalVeiculos == 0) {
                 Forms.aviso(this, "Você ainda não possui veículos. Cadastre um em \"Meus Veículos\".");
                 return;
             }
+            if (placas.isEmpty()) {
+                Forms.aviso(this, "Você não possui veículo do tipo \"" + tipoVaga
+                        + "\" para estacionar na vaga " + vaga + ".");
+                return;
+            }
+
             JComboBox<String> cmbPlaca = new JComboBox<>(placas.toArray(new String[0]));
-            if (!Forms.mostrar(this, "Estacionar na vaga " + vaga,
+            if (!Forms.mostrar(this, "Estacionar na vaga " + vaga + " (" + tipoVaga + ")",
                     new String[]{"Veículo (placa):"}, new JComponent[]{cmbPlaca})) return;
 
             final JsonObject campos = new JsonObject();
