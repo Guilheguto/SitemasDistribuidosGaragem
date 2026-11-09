@@ -164,6 +164,9 @@ public class SpotService {
                 if (v == null || (!ctx.isAdmin() && !ctx.getUsername().equals(v.getOwnerUsername()))) {
                     throw new RespostaException(404, "Veículo não encontrado.");
                 }
+                if (!v.getType().equals(atual.getType())) {
+                    throw new RespostaException(409, "Tipo do veículo incompatível com o tipo da vaga.");
+                }
                 if (spotDao.buscarPorPlaca(v.getLicensePlate()) != null) {
                     throw new RespostaException(409, "Veículo já está estacionado em uma vaga.");
                 }
